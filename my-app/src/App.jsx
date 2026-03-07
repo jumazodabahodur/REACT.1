@@ -3,6 +3,7 @@ import './App.css'
 function App() {
 
 
+function App() {
   return (
 <div>
 
@@ -300,4 +301,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
