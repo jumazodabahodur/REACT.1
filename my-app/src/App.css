@@ -1,31 +1,33 @@
 header{
   display: flex;
   align-items: center;
-  gap: 350px;
-  max-width: 1600px;
-  margin-left: 2%;
-
+  gap: 170px;
 }
-
-header p{
-  font-size: 20px;
-}
-
-.vkhod{
-  background-color: white;
-  border: none;
-}
-
-.registr{
-  background-color:#11AE88;
-  border: none;
-  color: white;
-  height: 42px;
-  width: 267px;
-  border-radius: 30px;
-  font-size: 22px;
-}
-
 body{
+  font-family: 'Inter', sans-serif;
+  max-width: 1700px;
   margin-left: 2%;
+  margin-right: 2%;
 }
+
+.card-lite:hover{
+  background-color: #DFCCB7;
+  transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  }
+
+  .card-menu:hover{
+  background-color: #ffffff;
+  transform: scale(1.03);
+    box-shadow: 0 0px 0px rgba(0,0,0,0.2);
+  }
+
+  .Aksiya1{
+    background-color: #EA9DA3;
+  
+  }
+
+    .Aksiya2{
+    background-color: #9898A0;
+  
+  }
