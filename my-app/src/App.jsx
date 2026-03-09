@@ -8,6 +8,8 @@ import Voprosi from './Voprosi.jsx'
 
 const App = () => {
 
+
+function App() {
   return (
     <div>
    <header>
@@ -176,4 +178,4 @@ const App = () => {
   )
 }
 
-export default App
+export default App;
