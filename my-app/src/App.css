@@ -1,7 +1,18 @@
+.Glava {
+  background-image: url('../public/img/Rectangle.jpg'); /* Путь к картинке из папки public */
+  background-size: cover;    /* Растянуть фото на весь экран */
+  background-position: center; /* Центрировать фото */
+  background-repeat: no-repeat; /* Не дублировать картинку */
+  min-height: 100vh;         /* Высота на весь экран */
+  width: 100%;
+  margin: 0;
+  padding: 30px;
+  color: white;
+  
+}
 
-
-body{
-  background-color: aliceblue;
-margin-left: 100px;
-font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+header{
+  display: flex;
+  align-items: center;
+  gap: 100px;
 }
