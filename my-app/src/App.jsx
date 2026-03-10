@@ -1,5 +1,12 @@
 
 import './App.css'
+import DayWeek from './DayWeek.jsx'
+import MenuCard from './MenuCard.jsx'
+import OService from './OService.jsx'
+import Aksiya from './Aksiya.jsx'
+import Voprosi from './Voprosi.jsx'
+
+const App = () => {
 
 import Card from './card.jsx';
 import Card2 from './card2.jsx';
@@ -26,6 +33,7 @@ const App = () => {
 
 
 
+function App() {
   return (
 <div>
 
