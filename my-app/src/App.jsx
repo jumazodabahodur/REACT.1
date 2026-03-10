@@ -1,35 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+import Card from './card.jsx';
+
+const App = () => {
+  const data = [
+    { id: 1, name:"C++ Kids Eco",date:"Jan 17,2026",location:"Profsoyuz", count:14, req:15 },
+    { id: 2, name:"Python",date:"Feb 10,2026",location:"Profsoyuz" , count:14, req:15 },
+    { id: 3, name:"Html&Css March 2026",date:"March 5,2026",location:"Sozidaniya" , count:13, req:15 },
+    { id: 3, name:"Html&Css March 2026",date:"March 5,2026",location:"Sozidaniya" , count:14, req:15 },
+    { id: 3, name:"Html&Css March 2026",date:"March 5,2026",location:"Sozidaniya" , count:14, req:15 },
+    { id: 3, name:"Html&Css March 2026",date:"March 5,2026",location:"Sozidaniya" , count:1, req:15 },
+    { id: 3, name:"Html&Css March 2026",date:"March 5,2026",location:"Sozidaniya" , count:10, req:15 },
+    { id: 3, name:"Html&Css March 2026",date:"March 5,2026",location:"Sozidaniya" , count:1, req:15 },
+    { id: 3, name:"Html&Css March 2026",date:"March 5,2026",location:"Sozidaniya" , count:13, req:15 },
+    { id: 3, name:"Html&Css March 2026",date:"March 5,2026",location:"Sozidaniya" , count:14, req:15 },
+    { id: 3, name:"Html&Css March 2026",date:"March 5,2026",location:"Sozidaniya" , count:14, req:15 },
+    { id: 3, name:"Html&Css March 2026",date:"March 5,2026",location:"Sozidaniya" , count:14, req:15 },
+  ];
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div style={{display:"grid",gridTemplateColumns: "repeat(4, 1fr)"}}>
+      {data.map((item) => (
+        <Card 
 
-export default App
+          key={item}
+          name={item.name}
+          date={item.date}
+          location={item.location}
+          count={item.count}
+          req={item.req}
+        />
+      ))}
+    </div>
+  );
+};
+
+export default App;
