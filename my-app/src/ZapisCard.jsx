@@ -1,8 +1,8 @@
 
 const ZapisCard = ({img}) => {
   return (
-    <div className="md:w-[205px] transition-transform duration-300 hover:scale-105 md:h-[111px]  w-[121px] h-[66px] bg-[white] rounded-[10px]">
-     <img src={img} alt="" className="p-[33px] "/>
+    <div className="md:w-51.25 transition-transform duration-300 hover:scale-105 md:h-27.75  w-30.25 h-16.5 bg-[white] rounded-[10px]">
+     <img src={img} alt="" className="p-8.25 "/>
     </div>
   )
 }
