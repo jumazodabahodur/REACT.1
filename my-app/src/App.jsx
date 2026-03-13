@@ -45,21 +45,20 @@ const handleSubmit = (event)=>{
 
 
     if (idx === null) {
-      // ИЛОВА КАРДАН (ADD): Агар idx холӣ бошад, объекти нав месозем
       const newUser = {
-        id: Date.now(), // ID-и беназир бо вақт
+        id: Date.now(), 
         name: nameEdit,
         age: ageEdit,
         status: false
       };
-      setData([...data, newUser]); // Массиви кӯҳна + корбари нав
+      setData([...data, newUser]); 
     } else {
-      // ТАҲРИР КАРДАН (EDIT): Агар idx мавҷуд бошад
+
       const obj = { id: idx, name: nameEdit, age: ageEdit, status: statusEdit };
       setData(data.map((item) => (item.id === idx ? obj : item)));
     }
 
-    // Баъди иҷрои кор, формаро тоза мекунем
+
     setIdx(null);
     setNameEdit("");
     setAgeEdit("");
@@ -97,8 +96,8 @@ const handleSubmit = (event)=>{
 <td>{e.name}</td>
 <td>{e.age}</td>
 <td>
-    <button onclick = {()=> showEdit(e)}>Edit</button>
-    <button onclick = {()=> deleteUser(e.id)}>Del</button>
+    <button onClick = {()=> showEdit(e)}>Edit</button>
+    <button onClick = {()=> deleteUser(e.id)}>Del</button>
 </td>
 
 </tr>
