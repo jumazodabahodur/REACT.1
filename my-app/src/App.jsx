@@ -1,154 +1,163 @@
-import React, { useState } from 'react';
+import { Delete, Edit as EditIcon } from '@mui/icons-material';
+import { Button, TextField, Switch, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
 const App = () => {
-  // Инициализируем состояние (базу данных) с начальными объектами
-  const [data, setData] = useState([
-    { id: 1, name: "Idibek", age: 17, status: false },
-    { id: 2, name: "Ali", age: 20, status: true },
-    { id: 3, name: "Ali", age: 2, status: true },
-    { id: 4, name: "hjbi", age: 28, status: true },
-    { id: 5, name: "Ali", age: 26, status: true },
-    { id: 6, name: "Aljbi", age: 20, status: true },
-    { id: 7, name: "Ali", age: 6, status: true },
-    { id: 8, name: "Ali", age: 20, status: true },
-  ]);
+  const api = "http://localhost:3002/data";
 
-  // Состояния для хранения значений в полях формы
-  const [nameEdit, setNameEdit] = useState("");
-  const [ageEdit, setAgeEdit] = useState("");
+  const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
-  const [idx, setIdx] = useState(null); // Хранит ID объекта, который мы сейчас правим
-  const [statusEdit, setStatusEdit] = useState(false);
+  const [filterStatus, setFilterStatus] = useState("");
 
-  // Состояния для модального окна (Info)
-  const [isInfoOpen, setIsInfoOpen] = useState(false); // Флаг: открыто окно или закрыто
-  const [selectedUser, setSelectedUser] = useState(null); // Сюда записываем объект юзера для отображения
+  const [editForm, setEditForm] = useState({
+    id: null,
+    name: "",
+    about: "",
+    img: "",
+    price: "",
+    status: false
+  });
 
-  // ФУНКЦИЯ УДАЛЕНИЯ: фильтрует массив, убирая элемент с нужным ID
-  const deleteUser = (id) => {
-    // filter() создает новый массив, куда попадают все, КРОМЕ того, чей ID совпал
-    setData(data.filter((item) => item.id !== id));
+  async function get() {
+    try {
+      const params = {};
+      if (search) params.name_like = search;
+      if (filterStatus !== "") params.status = filterStatus;
+
+      const response = await axios.get(api, { params });
+      setData(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    get();
+  }, [search, filterStatus]);
+
+  const showEdit = (user) => {
+    setEditForm(user);
   };
 
-  // ФУНКЦИЯ РЕДАКТИРОВАНИЯ: берет данные выбранного юзера и закидывает их в форму
-  const showEdit = (e) => {
-    setAgeEdit(e.age);
-    setNameEdit(e.name);
-    setIdx(e.id); // Запоминаем, какой именно ID мы будем обновлять
-    setStatusEdit(e.status);
+  const handleEditChange = (e) => {
+    setEditForm({ ...editForm, [e.target.name]: e.target.value });
   };
 
-  // ФУНКЦИЯ СОХРАНЕНИЯ: срабатывает при нажатии кнопки "Save"
-  const handleSubmit = (event) => {
+  async function handleSubmit(event) {
     event.preventDefault();
-
-    // 1. Тафтиш: Агар инпутҳо холӣ бошанд, идома надеҳ
-    if (!nameEdit.trim() || !ageEdit) {
-      alert("Лутфан ном ва синну солро нависед!");
-      return;
+    const formData = new FormData(event.currentTarget);
+    const newUser = {
+      name: formData.get("name"),
+      about: formData.get("about"),
+      img: formData.get("img"),
+      price: formData.get("price"),
+      status: false
+    };
+    try {
+      await axios.post(api, newUser);
+      get();
+      event.target.reset();
+    } catch (error) {
+      console.error(error);
     }
+  }
 
-    if (idx === null) {
-      // 2. ИЛОВА КАРДАН (ADD)
-      const newUser = {
-        id: Date.now(), 
-        name: nameEdit,
-        age: ageEdit,
-        status: false
-      };
-      setData([...data, newUser]);
-    } else {
-      // 3. ТАҲРИР КАРДАН (EDIT)
-      const obj = { id: idx, name: nameEdit, age: ageEdit, status: statusEdit };
-      setData(data.map((item) => (item.id === idx ? obj : item)));
+  async function handleSubmitEdit(event) {
+    event.preventDefault();
+    try {
+      await axios.put(`${api}/${editForm.id}`, editForm);
+      get();
+      setEditForm({ id: null, name: "", about: "", img: "", price: "", status: false });
+    } catch (error) {
+      console.error(error);
     }
+  }
 
-    // 4. Тоза кардани форма
-    setIdx(null);
-    setNameEdit("");
-    setAgeEdit("");
-    setSearch("");
-  };
+  async function changeStatus(user) {
+    try {
+      await axios.patch(`${api}/${user.id}`, { status: !user.status });
+      get();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async function deleteUser(id) {
+   {
+      try {
+        await axios.delete(`${api}/${id}`);
+        get();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+
   return (
-    <div className='p-10'>
-      {/* Форма для добавления или редактирования */}
-      <form onSubmit={handleSubmit} className='mb-5'>
-        <input className='border m-2 p-1' value={nameEdit} onChange={(e) => setNameEdit(e.target.value)} placeholder="Name" />
-        <input className='border m-2 p-1' value={ageEdit} onChange={(e) => setAgeEdit(e.target.value)} placeholder="Age" />
-        <button type='submit' className='bg-blue-500 text-white p-1 rounded'>Save</button>
-      </form>
-<input value={search} onChange={(e)=>setSearch(e.target.value)} type="search" className='border rounded-lg p-2 outline-none' />
+    <section style={{ padding: "40px" }}>
+      <div style={{ display: "flex", gap: "20px", marginBottom: "40px", flexWrap: "wrap" }}>
+        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: 'column', width: "250px", gap: "10px" }}>
+          <Typography variant="h6">Add New</Typography>
+          <TextField name='name' label="Name" size="small" required />
+          <TextField name='about' label="About" size="small" />
+          <TextField name='img' label="Image URL" size="small" />
+          <TextField name='price' label="Price" size="small" />
+          <Button type='submit' variant='contained' color="success">Add</Button>
+        </form>
 
-      {/* Таблица со списком */}
-{/* Таблица со списком */}
+        <form onSubmit={handleSubmitEdit} style={{ display: "flex", flexDirection: 'column', width: "250px", gap: "10px" }}>
+          <Typography variant="h6">Edit Product</Typography>
+          <TextField name='img' value={editForm.img} onChange={handleEditChange} label="Image" size="small" />
+          <TextField name='name' value={editForm.name} onChange={handleEditChange} label="Name" size="small" />
+          <TextField name='about' value={editForm.about} onChange={handleEditChange} label="About" size="small" />
+          <TextField name='price' value={editForm.price} onChange={handleEditChange} label="Price" size="small" />
+          <Button type='submit' variant='contained' disabled={!editForm.id}>Save Changes</Button>
+        </form>
 
-<div className="overflow-hidden rounded-lg border border-gray-200 shadow-md mt-5">
-  <table className='border-collapse w-full text-left bg-white'>
-    <thead className='bg-gray-100'>
-      <tr>
-        <th className='p-4 font-bold text-gray-700 border-b'>Name</th>
-        <th className='p-4 font-bold text-gray-700 border-b'>Age</th>
-        <th className='p-4 font-bold text-gray-700 border-b text-center'>Actions</th>
-      </tr>
-    </thead>
-    <tbody className='divide-y divide-gray-100'>
-      {data
-        .filter((e) => e.name.toLowerCase().includes(search.trim().toLowerCase()))
-        .map((e) => (
-          <tr key={e.id} className='hover:bg-blue-50 transition-colors'>
-            <td className='p-4 text-gray-800 font-medium'>{e.name}</td>
-            <td className='p-4 text-gray-600'>{e.age}</td>
-            <td className='p-4 text-center'>
-              <div className="flex justify-center gap-3">
-                <button 
-                  onClick={() => { setSelectedUser(e); setIsInfoOpen(true); }} 
-                  className='text-blue-500 hover:scale-120 transition-transform' 
-                  title="Info"
-                >
-                  ℹ️
-                </button>
-                <button 
-                  onClick={() => showEdit(e)} 
-                  className='text-orange-500 hover:scale-120 transition-transform' 
-                  title="Edit"
-                >
-                  ✏️
-                </button>
-                <button 
-                  onClick={() => deleteUser(e.id)} 
-                  className='text-red-500 hover:scale-120 transition-transform' 
-                  title="Delete"
-                >
-                  🗑️
-                </button>
-              </div>
-            </td>
-          </tr>
-        ))}
-    </tbody>
-  </table>
-</div>
-
-    {/* Модальное окно */}
-{isInfoOpen && selectedUser && (
-  <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
-    <div className='bg-white p-6 rounded-lg shadow-xl border w-80'>
-      <h2 className="text-xl font-bold mb-4 text-blue-600">User Info</h2>
-      <div className="space-y-2">
-        <p><strong>Name:</strong> {selectedUser.name}</p>
-        <p><strong>Age:</strong> {selectedUser.age}</p>
-        <p><strong>Status:</strong> {selectedUser.status ? "Active" : "Inactive"}</p>
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <TextField
+            label="Search name..."
+            variant="outlined"
+            size="small"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <select 
+            value={filterStatus} 
+            onChange={(e) => setFilterStatus(e.target.value)} 
+            style={{ padding: "8px", borderRadius: "4px" }}
+          >
+            <option value="">All Status</option>
+            <option value="true">On sale</option>
+            <option value="false">Out of sale</option>
+          </select>
+        </div>
       </div>
-      <button 
-        onClick={() => setIsInfoOpen(false)} 
-        className='bg-red-500 hover:bg-red-600 text-white p-2 w-full rounded mt-4 transition-colors'
-      >
-        Close
-      </button>
-    </div>
-  </div>
-)}
-    </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "20px" }}>
+        {data.map((user) => (
+          <Card key={user.id} sx={{ maxWidth: 345 }}>
+            <CardMedia sx={{ height: 200 }} image={user.img || 'https://via.placeholder.com/200'} title={user.name} />
+            <CardContent>
+              <Typography gutterBottom variant="h5">{user.name}</Typography>
+              <Typography variant="body2" color="text.secondary">{user.about}</Typography>
+              <div style={{ display: "flex", justifyContent: "space-between", marginTop: "10px" }}>
+                <Typography variant="h6" color="primary">{user.price}$</Typography>
+                <Typography color={user.status ? "green" : "red"}>
+                  {user.status ? "On sale" : "Out of sale"}
+                </Typography>
+              </div>
+            </CardContent>
+            <CardActions>
+              <Button onClick={() => deleteUser(user.id)} startIcon={<Delete />} color='error' size="small">Delete</Button>
+              <Button onClick={() => showEdit(user)} startIcon={<EditIcon />} size="small">Edit</Button>
+              <Switch checked={!!user.status} onChange={() => changeStatus(user)} />
+            </CardActions>
+          </Card>
+        ))}
+      </div>
+    </section>
   );
 };
 
