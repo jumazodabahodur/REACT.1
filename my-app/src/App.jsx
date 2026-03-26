@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import Home from './pages/Home';
 import About from './pages/About';
 import ProductById from "./pages/ProductId"
+import Layout from './Layout/Layout';
 const App = () => {
   return (
     <BrowserRouter>

@@ -1,6 +1,12 @@
 import React from 'react'
 import { Link, Outlet } from "react-router-dom" 
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 const Layout = () => {
  const products = [
     {
@@ -17,6 +23,18 @@ const Layout = () => {
     },
         {
       id: 3,
+      name: "Danubius Hotel Regents Park",
+      cost: "200$",
+      image: "/img/image (63).png", 
+    },
+           {
+      id: 4,
+      name: "Danubius Hotel Regents Park",
+      cost: "200$",
+      image: "/img/image (63).png", 
+    },
+           {
+      id: 5,
       name: "Danubius Hotel Regents Park",
       cost: "200$",
       image: "/img/image (63).png", 
@@ -39,23 +57,47 @@ const Layout = () => {
    </div>
  <Outlet /> 
  
-      <div className='ml-[10%] mt-20'>
-        <h2 className='text-3xl font-bold mb-10'>Our most popular Hotels</h2>
-        
-        <div className='flex gap-6'>
-          {products.map((item) => (
-            <Link to={`/product/${item.id}`} key={item.id} className="block group">
-              <div className="w-[400px] rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition">
-                <img src={item.image} alt={item.name} className='w-full h-[300px] object-cover' />
+<div className='ml-[10%] mt-20 pr-[10%]'>
+      <h2 className='text-3xl font-bold mb-10'>Our most popular Hotels</h2>
+      
+      <Swiper
+        modules={[Navigation, Pagination, Autoplay]}
+        spaceBetween={24}
+        slidesPerView={'auto'} 
+        loop={true}
+        speed={800}
+        autoplay={{ delay: 3000, disableOnInteraction: false }}
+        breakpoints={{
+     
+          320: { slidesPerView: 1 },
+          768: { slidesPerView: 2 },
+          1200: { slidesPerView: 3 },
+        }}
+        className="pb-12"
+      >
+        {products.map((item) => (
+          <SwiperSlide key={item.id} className="w-[400px]">
+            <Link to={`/product/${item.id}`} className="block group">
+              <div className="rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
+                <img 
+                  src={item.image} 
+                  alt={item.name} 
+                  className='w-full h-[300px] object-cover' 
+                />
                 <div className='p-4'>
-                  <h3 className='font-bold group-hover:text-emerald-600'>{item.name}</h3>
-                  <p className='text-emerald-500 font-semibold mt-2'>{item.cost} / Night</p>
+                  <h3 className='font-bold group-hover:text-emerald-600 transition-colors'>
+                    {item.name}
+                  </h3>
+                  <p className='text-emerald-500 font-semibold mt-2'>
+                    {item.cost} / Night
+                  </p>
                 </div>
               </div>
             </Link>
-          ))}
-        </div>
-      </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
+    </div>
  
 
 <div className='ml-[10%] mt-[90px] items-center gap-[50px] flex'>
