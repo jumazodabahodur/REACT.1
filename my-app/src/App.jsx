@@ -1,28 +1,28 @@
-import React, { lazy, Suspense } from 'react'
-import { BrowserRouter, Route, Routes } from "react-router-dom" 
-import Home from './pages/Home';
-
-import ProductById from "./pages/ProductById"
-import Layout from './Layout/Layout';
-
-const About = lazy(() =>new Promise((resolve) => { setTimeout(() => resolve(import("./pages/About")), 2000); }));
+import React, { useCallback, useState } from 'react'
+import Card from "./pages/Card"
 const App = () => {
+
+  const [count,setCount] = useState(0)
+  const [count2,setCount2] = useState(0)
+
+  const handelClick = useCallback(()=>{
+console.log("Clicked");
+
+  },[])
+
+  console.log("Parent render");
+  
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index={true} element={<Home />} /> 
-          <Route
-           path='/about'
-            element={
-            <Suspense fallback={"loading..."}>
-            <About /> </Suspense>} /> 
-          <Route path='/product/:productId' element={<ProductById/>} /> 
-        </Route>
-        <Route path='*' element={<div>Not FOund</div>}/>
-      </Routes>
-    </BrowserRouter>
-  );
+    <div>
+      <p>{count}</p>
+      <button onClick={()=> setCount(count + 1)}>Inc</button>
+
+         <p>{count2}</p>
+      <button onClick={()=> setCount2(count2 + 1)}>Inc</button>
+      <Card onClick={handelClick} count={count} />
+    </div>
+  )
 }
 
 export default App
