@@ -31,7 +31,7 @@ class ToDoService {
     fd.append("IsActive", values.isActive);
     
     if (id) fd.append("Id", id);
-    if (file) fd.append("Images", file); // Файл танҳо бо FormData меравад
+    if (file) fd.append("Images", file);
 
     return await axios({
       method: id ? 'put' : 'post',
@@ -45,8 +45,8 @@ class ToDoService {
 const service = new ToDoService();
 
 const ToDoList = () => {
-  const [items, setItems] = useState([]);      // Рӯйхати вазифаҳо
-  const [loading, setLoading] = useState(false); // Ҳолати "Loading" ҳангоми сабт
+  const [items, setItems] = useState([]);     
+  const [loading, setLoading] = useState(false); 
   const [editItem, setEditItem] = useState(null); 
   const navigate = useNavigate();
 
@@ -166,3 +166,12 @@ export default function App() {
     </BrowserRouter>
   );
 }
+
+
+
+
+
+
+
+
+
