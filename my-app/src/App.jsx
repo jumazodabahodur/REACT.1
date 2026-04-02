@@ -1,124 +1,125 @@
-import React, { useReducer, useState } from 'react';
+import React, { Component } from "react";
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'ADD_USER':
-      return [...state, action.payload];
-    case 'DELETE_USER':
-      return state.filter(user => user.id !== action.payload);
-    case 'UPDATE_USER':
-      return state.map(user => 
-        user.id === action.payload.id ? action.payload : user
-      );
-    default:
-      return state;
+class Card {
+  constructor(title, img) {
+    this.title = title;
+    this.img = img;
   }
-};
-
-const initialUsers = [
-  { id: 1, name: "Иван Иванов", email: "ivan@mail.ru" },
-  { id: 2, name: "Анна Петрова", email: "anna@mail.ru" }
-];
-
-export default function CrudApp() {
-  const [users, dispatch] = useReducer(reducer, initialUsers);
-  const [formData, setFormData] = useState({ name: '', email: '' });
-  const [editId, setEditId] = useState(null);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (editId) {
-      dispatch({ type: 'UPDATE_USER', payload: { ...formData, id: editId } });
-      setEditId(null);
-    } else {
-      dispatch({ type: 'ADD_USER', payload: { ...formData, id: Date.now() } });
-    }
-    setFormData({ name: '', email: '' });
-  };
-
-  const handleEdit = (user) => {
-    setEditId(user.id);
-    setFormData({ name: user.name, email: user.email });
-  };
-
-  return (
-    <div style={{ padding: '30px', fontFamily: 'Arial, sans-serif' }}>
-      <h1>Tabel</h1>
-
-      <form onSubmit={handleSubmit} style={{ marginBottom: '25px', display: 'flex', gap: '10px' }}>
-        <input
-          type="text"
-          placeholder="Имя"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          required
-          style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-          required
-          style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
-        />
-        <button 
-          type="submit" 
-          style={{ 
-            padding: '8px 20px', 
-            backgroundColor: editId ? '#2196F3' : '#4CAF50', 
-            color: 'white', 
-            border: 'none', 
-            borderRadius: '4px', 
-            cursor: 'pointer' 
-          }}
-        >
-          {editId ? 'Сохранить' : 'Добавить'}
-        </button>
-        {editId && (
-          <button onClick={() => {setEditId(null); setFormData({name:'', email:''})}} type="button">Отмена</button>
-        )}
-      </form>
-
-      <table border="1" cellPadding="10" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-        <thead style={{ backgroundColor: '#f2f2f2' }}>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.length > 0 ? (
-            users.map(user => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.name}</td>
-                <td>{user.email}</td>
-                <td>
-                  <button 
-                    onClick={() => handleEdit(user)}
-                    style={{ marginRight: '10px', backgroundColor: '#FFC107', border: 'none', padding: '5px 10px', borderRadius: '3px', cursor: 'pointer' }}
-                  >
-                    edit
-                  </button>
-                  <button 
-                    onClick={() => dispatch({ type: 'DELETE_USER', payload: user.id })}
-                    style={{ backgroundColor: '#F44336', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '3px', cursor: 'pointer' }}
-                  >
-                   delete
-                  </button>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="4" style={{ textAlign: 'center' }}>Список пуст</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
-  );
 }
+
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.cards = [
+      new Card("Consider it done!", "https://picsum.photos/300/200"),
+      new Card("Design", "https://picsum.photos/200/200"),
+      new Card("Idea", "https://picsum.photos/201/200"),
+      new Card("Creative", "https://picsum.photos/202/200"),
+    ];
+  }
+
+  render() {
+    return (
+      <div className="bg-gray-100 min-h-screen p-6">
+        <Navbar />
+        <Hero />
+        <Grid cards={this.cards} />
+        <Pricing />
+      </div>
+    );
+  }
+}
+
+class Navbar extends Component {
+  render() {
+    return (
+      <div className="flex justify-between items-center mb-10">
+        <h2 className="text-xl font-bold">Grid</h2>
+
+        <div className="flex items-center gap-6 text-gray-500">
+          <a href="#">How it works</a>
+          <a href="#">Who we are</a>
+          <a href="#">Contact</a>
+
+          <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg">
+            Sign in
+          </button>
+        </div>
+      </div>
+    );
+  }
+}
+
+class Hero extends Component {
+  render() {
+    return (
+      <div className="text-center mb-16">
+        <h1 className="text-5xl font-bold">
+          Combine <span className="text-red-500">fine</span> images
+        </h1>
+        <p className="text-xl text-gray-600 mt-4">
+          To represent a product
+        </p>
+      </div>
+    );
+  }
+}
+
+class Grid extends Component {
+  render() {
+    return (
+      <div className="grid grid-cols-4 gap-4 mb-20">
+        {this.props.cards.map((card, i) => (
+          <div
+            key={i}
+            className="bg-white rounded-2xl shadow-md overflow-hidden hover:scale-105 transition"
+          >
+            <img src={card.img} className="w-full h-40 object-cover" />
+            <h3 className="p-4 font-semibold">{card.title}</h3>
+          </div>
+        ))}
+      </div>
+    );
+  }
+}
+
+class Pricing extends Component {
+  render() {
+    return (
+      <div className="text-center">
+        <h2 className="text-3xl font-bold mb-10">
+          Affordable pricing
+        </h2>
+
+        <div className="flex justify-center gap-6">
+          <div className="bg-white p-6 rounded-2xl shadow w-40">
+            <h3 className="font-bold">Free</h3>
+            <p className="text-2xl">$0</p>
+            <button className="mt-4 border px-4 py-2 rounded-lg">
+              Try
+            </button>
+          </div>
+
+          <div className="bg-indigo-600 text-white p-6 rounded-2xl shadow w-40 scale-110">
+            <h3 className="font-bold">$24</h3>
+            <p>Best</p>
+            <button className="mt-4 bg-white text-indigo-600 px-4 py-2 rounded-lg">
+              Buy
+            </button>
+          </div>
+
+          <div className="bg-white p-6 rounded-2xl shadow w-40">
+            <h3 className="font-bold">$12</h3>
+            <p>Corp</p>
+            <button className="mt-4 border px-4 py-2 rounded-lg">
+              Buy
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default App;
