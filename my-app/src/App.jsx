@@ -110,7 +110,7 @@ class Pricing extends Component {
           </div>
 
           <div className="bg-white p-6 rounded-2xl shadow w-40">
-            <h3 className="font-bold">$12</h3>
+            <h3 className="font-bold">$13</h3>
             <p>Corp</p>
             <button className="mt-4 border px-4 py-2 rounded-lg">
               Buy
