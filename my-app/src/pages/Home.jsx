@@ -94,7 +94,7 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="mt-24">
+      <div className="pt-24">
         <NFTSection />
         <h1 className="text-[50px] pt-[100px] font-bold text-black">{t.topCollection}</h1>
         <Table />

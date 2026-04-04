@@ -26,8 +26,7 @@ code: 'EN',
   return (
     <div className="min-h-screen bg-white font-sans text-gray-900">
      
-      <nav className="flex items-center justify-between px-12 py-4 border-b border-gray-100 bg-white sticky top-0 z-[100] shadow-sm">
-        
+<nav className="flex items-center justify-between px-12 py-4 bg-white sticky top-0 z-[100]">        
     
         <div className="flex items-center gap-10">
           <div 
