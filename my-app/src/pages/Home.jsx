@@ -90,7 +90,7 @@ const Home = () => {
 
         </div>
         <div className="flex-1 flex justify-end">
-          <img src="img/Hero Header.png" alt="Hero" className="w-full max-w-[600px] animate-pulse-slow" />
+          <img src="img/Hero Header.png " alt="Hero" className="w-full max-w-[600px] animate-pulse-slow" />
         </div>
       </div>
 
